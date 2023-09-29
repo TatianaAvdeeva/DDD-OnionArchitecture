@@ -1,9 +1,7 @@
 using System.Reflection;
 using DDDTemplate.Application;
-using DDDTemplate.Application.Startup;
 using DDDTemplate.Domain;
 using DDDTemplate.Infrastructure;
-using DDDTemplate.Infrastructure.Persistence;
 using Kernel.Base.Startup;
 
 LoggingStartup.ConfigureBootstrapLogging();
@@ -27,5 +25,9 @@ var app = builder.Build();
 
 Kernel.Base.Startup.StartupBase.ConfigureApp(app);
 
-//app.MigrateDbContext<TemplateDbContext>(null);
+if (builder.Environment.IsDevelopment())
+{
+    await app.RunMigrationAsync(); 
+}
+
 app.Run();
